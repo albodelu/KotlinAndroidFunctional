@@ -10,18 +10,18 @@ import kategory.InstanceParametrizedType
 
 class KotlinArchitectureApp : Application() {
 
-    override fun onCreate() {
-        super.onCreate()
-        initGlobalInstances()
-    }
+  override fun onCreate() {
+    super.onCreate()
+    initGlobalInstances()
+  }
 
-    private fun initGlobalInstances() {
-        GlobalInstances.putIfAbsent(
-                InstanceParametrizedType(
-                        MonadControl::class.java,
-                        listOf(AsyncResult.F::class.java, GetHeroesContext::class.java, CharacterError::class.java)
-                ),
-                AsyncResult
-        )
-    }
+  private fun initGlobalInstances() {
+    GlobalInstances.putIfAbsent(
+        InstanceParametrizedType(
+            MonadControl::class.java,
+            listOf(AsyncResult.F::class.java, GetHeroesContext::class.java, CharacterError::class.java)
+        ),
+        AsyncResult
+    )
+  }
 }
