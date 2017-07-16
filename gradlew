@@ -6,6 +6,9 @@
 ##
 ##############################################################################
 
+LC_NUMERIC="en_US.UTF-8"
+android.enableAapt2=false
+
 # Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
 DEFAULT_JVM_OPTS=""
 
