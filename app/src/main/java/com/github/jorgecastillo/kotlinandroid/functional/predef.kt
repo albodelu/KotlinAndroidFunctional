@@ -20,9 +20,7 @@ class AsyncResult<A>(val value: Result<A>) : AsyncResultKind<A> {
     class F private constructor()
     companion object :
             AsyncResultMonadControl,
-            GlobalInstance<MonadControl<AsyncResult.F, GetHeroesContext, CharacterError>>() {
-        fun init() : AsyncResult<Unit> = pure(Unit)
-    }
+            GlobalInstance<MonadControl<AsyncResult.F, GetHeroesContext, CharacterError>>()
 
     fun run(ctx : GetHeroesContext): HK<EitherTF<Future.F, CharacterError>, A> = value.run(ctx)
 }
@@ -33,7 +31,7 @@ interface MonadControl<F, D, E> :
         Typeclass
 
 inline fun <reified F, reified D, reified E> monadControl(): MonadControl<F, D, E> =
-        instance(InstanceParametrizedType(MonadControl::class.java, listOf(F::class.java, D::class.java)))
+        instance(InstanceParametrizedType(MonadControl::class.java, listOf(F::class.java, D::class.java, E::class.java)))
 
 interface AsyncResultMonadControl : MonadControl<AsyncResult.F, GetHeroesContext, CharacterError> {
 
