@@ -6,10 +6,14 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.github.jorgecastillo.kotlinandroid.R
 import com.github.jorgecastillo.kotlinandroid.di.context.GetHeroesContext
+import com.github.jorgecastillo.kotlinandroid.functional.AsyncResult
+import com.github.jorgecastillo.kotlinandroid.functional.ev
+import com.github.jorgecastillo.kotlinandroid.functional.monadControl
 import com.github.jorgecastillo.kotlinandroid.presentation.SuperHeroesView
 import com.github.jorgecastillo.kotlinandroid.presentation.getSuperHeroes
 import com.github.jorgecastillo.kotlinandroid.view.adapter.HeroesCardAdapter
 import com.github.jorgecastillo.kotlinandroid.view.viewmodel.SuperHeroViewModel
+import kategory.binding
 import kotlinx.android.synthetic.main.activity_main.*
 
 class SuperHeroListActivity : AppCompatActivity(), SuperHeroesView {
@@ -31,7 +35,7 @@ class SuperHeroListActivity : AppCompatActivity(), SuperHeroesView {
 
   override fun onResume() {
     super.onResume()
-    getSuperHeroes().run(GetHeroesContext(this))
+    getSuperHeroes(AsyncResult).ev().run(GetHeroesContext(this))
   }
 
   override fun drawHeroes(heroes: List<SuperHeroViewModel>) {
