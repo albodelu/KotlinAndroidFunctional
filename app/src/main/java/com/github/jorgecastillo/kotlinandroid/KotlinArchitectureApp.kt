@@ -1,16 +1,27 @@
 package com.github.jorgecastillo.kotlinandroid
 
 import android.app.Application
-import kategory.Id
+import com.github.jorgecastillo.architecturecomponentssample.model.error.CharacterError
+import com.github.jorgecastillo.kotlinandroid.di.context.GetHeroesContext
+import com.github.jorgecastillo.kotlinandroid.functional.AsyncResult
+import com.github.jorgecastillo.kotlinandroid.functional.MonadControl
+import kategory.GlobalInstances
+import kategory.InstanceParametrizedType
 
 class KotlinArchitectureApp : Application() {
 
-  override fun onCreate() {
-    super.onCreate()
-    initGlobalInstances()
-  }
+    override fun onCreate() {
+        super.onCreate()
+        initGlobalInstances()
+    }
 
-  private fun initGlobalInstances() {
-    val id = Id(1)
-  }
+    private fun initGlobalInstances() {
+        GlobalInstances.putIfAbsent(
+                InstanceParametrizedType(
+                        MonadControl::class.java,
+                        listOf(AsyncResult.F::class.java, GetHeroesContext::class.java, CharacterError::class.java)
+                ),
+                AsyncResult
+        )
+    }
 }
