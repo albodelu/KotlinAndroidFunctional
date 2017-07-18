@@ -1,6 +1,6 @@
 package com.github.jorgecastillo.kotlinandroid.functional
 
-import com.github.jorgecastillo.architecturecomponentssample.model.error.*
+import com.github.jorgecastillo.architecturecomponentssample.model.error.CharacterError
 import com.github.jorgecastillo.kotlinandroid.di.context.GetHeroesContext
 import kategory.*
 
@@ -22,7 +22,7 @@ class AsyncResult<A>(val value: Result<A>) : AsyncResultKind<A> {
       AsyncResultMonadControl,
       GlobalInstance<MonadControl<AsyncResult.F, GetHeroesContext, CharacterError>>()
 
-  fun run(ctx : GetHeroesContext): HK<EitherTF<Future.F, CharacterError>, A> = value.run(ctx)
+  fun run(ctx: GetHeroesContext): HK<EitherTF<Future.F, CharacterError>, A> = value.run(ctx)
 }
 
 interface MonadControl<F, D, E> :
@@ -31,7 +31,8 @@ interface MonadControl<F, D, E> :
     Typeclass
 
 inline fun <reified F, reified D, reified E> monadControl(): MonadControl<F, D, E> =
-    instance(InstanceParametrizedType(MonadControl::class.java, listOf(F::class.java, D::class.java, E::class.java)))
+    instance(InstanceParametrizedType(MonadControl::class.java,
+        listOf(F::class.java, D::class.java, E::class.java)))
 
 interface AsyncResultMonadControl : MonadControl<AsyncResult.F, GetHeroesContext, CharacterError> {
 
@@ -44,13 +45,16 @@ interface AsyncResultMonadControl : MonadControl<AsyncResult.F, GetHeroesContext
   override fun <A, B> map(fa: HK<AsyncResult.F, A>, f: (A) -> B): AsyncResult<B> =
       AsyncResult(KM().map(fa.ev().value, f))
 
-  override fun <A, B> product(fa: HK<AsyncResult.F, A>, fb: HK<AsyncResult.F, B>): AsyncResult<Tuple2<A, B>> =
+  override fun <A, B> product(fa: HK<AsyncResult.F, A>,
+      fb: HK<AsyncResult.F, B>): AsyncResult<Tuple2<A, B>> =
       AsyncResult(KM().product(fa.ev().value, fb.ev().value))
 
-  override fun <A, B> flatMap(fa: HK<AsyncResult.F, A>, f: (A) -> HK<AsyncResult.F, B>): AsyncResult<B> =
+  override fun <A, B> flatMap(fa: HK<AsyncResult.F, A>,
+      f: (A) -> HK<AsyncResult.F, B>): AsyncResult<B> =
       AsyncResult(KM().flatMap(fa.ev().value, f.andThen { it.ev().value }))
 
-  override fun <A> handleErrorWith(fa: HK<AsyncResult.F, A>, f: (CharacterError) -> HK<AsyncResult.F, A>): AsyncResult<A> =
+  override fun <A> handleErrorWith(fa: HK<AsyncResult.F, A>,
+      f: (CharacterError) -> HK<AsyncResult.F, A>): AsyncResult<A> =
       AsyncResult(KM().handleErrorWith(fa.ev().value, f.andThen { it.ev().value }))
 
   override fun <A, B> tailRecM(a: A, f: (A) -> HK<AsyncResult.F, Either<A, B>>): AsyncResult<B> =
@@ -65,6 +69,10 @@ interface AsyncResultMonadControl : MonadControl<AsyncResult.F, GetHeroesContext
   override fun ask(): AsyncResult<GetHeroesContext> =
       AsyncResult(KM().ask())
 
-  override fun <A> local(f: (GetHeroesContext) -> GetHeroesContext, fa: HK<AsyncResult.F, A>): AsyncResult<A> =
+  override fun <A> local(f: (GetHeroesContext) -> GetHeroesContext,
+      fa: HK<AsyncResult.F, A>): AsyncResult<A> =
       AsyncResult(KM().local(f, fa.ev().value))
 }
+
+
+

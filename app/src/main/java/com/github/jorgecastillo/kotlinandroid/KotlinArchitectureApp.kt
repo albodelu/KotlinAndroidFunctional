@@ -19,7 +19,8 @@ class KotlinArchitectureApp : Application() {
     GlobalInstances.putIfAbsent(
         InstanceParametrizedType(
             MonadControl::class.java,
-            listOf(AsyncResult.F::class.java, GetHeroesContext::class.java, CharacterError::class.java)
+            listOf(AsyncResult.F::class.java, GetHeroesContext::class.java,
+                CharacterError::class.java)
         ),
         AsyncResult
     )
