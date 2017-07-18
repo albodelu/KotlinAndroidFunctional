@@ -68,5 +68,3 @@ interface AsyncResultMonadControl : MonadControl<AsyncResult.F, GetHeroesContext
   override fun <A> local(f: (GetHeroesContext) -> GetHeroesContext, fa: HK<AsyncResult.F, A>): AsyncResult<A> =
       AsyncResult(KM().local(f, fa.ev().value))
 }
-
-
